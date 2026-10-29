@@ -45,7 +45,7 @@ evaluate("majority", len(train), dummy.predict(val["text"]))
 
 # 2. TF-IDF + logistic regression, try a few values of C on the validation set
 best_C, best_f1 = 1.0, 0
-for C in [0.3, 1, 3, 10]:
+for C in [1, 3, 10, 30, 100]:
     model = make_model(C).fit(train["text"], train["label"])
     f1 = f1_score(val["label"], model.predict(val["text"]), average="macro")
     print(f"C = {C}: macro-F1 {f1:.3f}")
