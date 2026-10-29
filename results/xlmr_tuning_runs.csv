@@ -1,0 +1,4 @@
+run,method,rank,targets,train_size,seed,lr,epochs,best_epoch,trainable_params,total_params,trainable_pct,peak_mem_gb,train_time_min,latency_ms_bs1,latency_ms_bs32,split,accuracy,macro_f1,f1_negative,gpu
+head_nfull_s1,head,,,33028,1,0.001,3,3,592130,278045186,0.213,1.24,3.47,9.44,6.42,val,0.8847,0.8417,0.7591,Tesla T4
+lora_r8_qv_nfull_s1,lora,8.0,qv,33028,1,0.0005,3,3,887042,278045186,0.319,2.47,7.68,8.83,6.55,val,0.9218,0.8914,0.8339,Tesla T4
+ia3_nfull_s1,ia3,,,33028,1,0.003,3,1,647426,278045186,0.2328,3.03,8.96,12.75,6.68,val,0.9283,0.896,0.8381,Tesla T4
