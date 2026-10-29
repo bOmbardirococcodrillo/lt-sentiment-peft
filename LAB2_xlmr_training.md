@@ -29,6 +29,7 @@ else:
     !git clone https://github.com/bOmbardirococcodrillo/lt-sentiment-peft.git
     %cd lt-sentiment-peft
 !pip install -q peft
+!pip uninstall -y -q torchao   # Kaggle's old torchao breaks the new peft; we don't need it
 !nvidia-smi --query-gpu=name,memory.total --format=csv
 !ls data
 ```
@@ -69,7 +70,7 @@ Run them one after another, each in its own cell:
 !python train_xlmr.py --method ia3
 ```
 
-Each run trains for 3 epochs on 33,028 reviews and prints the validation macro-F1 after each epoch. It keeps the **best epoch**.
+Each run trains for 6 epochs on 33,028 reviews and prints the validation macro-F1 after each epoch. It keeps the **best epoch**.
 
 **Write down the training time of the first run.** It tells us how long the ablations will take. (We expect roughly 5–20 minutes per run on a T4, but measure it.)
 
@@ -135,6 +136,8 @@ That's 36 small runs, but small data trains fast. Then `!python make_table.py` d
 | `device: CPU (slow!)` | Accelerator is not set to GPU, or GPU quota used up (Kaggle gives ~30 h/week) |
 | `CUDA out of memory` | Add `--batch_size 16` |
 | `No module named 'peft'` | Run `!pip install -q peft` |
+| `ImportError: Found an incompatible version of torchao` | Run `!pip uninstall -y -q torchao`, then run again |
+| `LOAD REPORT` with UNEXPECTED / MISSING keys | Normal: the old pre-training layers are not used, and the new classifier head starts random (that's what we train) |
 | Loss becomes `nan` | Learning rate too high, try `--lr 2e-4` |
 | `KeyError` with `--train_size` | Use exactly `500`, `1000`, `2000` or `5000` |
 | Results disappeared | Session ended. Always download/push `results/` after running |

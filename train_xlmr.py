@@ -39,10 +39,12 @@ parser.add_argument("--model", default="FacebookAI/xlm-roberta-base")
 parser.add_argument("--test", action="store_true")                       # only for the final results!
 args = parser.parse_args()
 
-# default settings per method (we tuned nothing yet, these are common values)
-DEFAULT_LR = {"head": 1e-3, "lora": 5e-4, "ia3": 3e-3, "full": 2e-5}
+# default settings per method, chosen on the VALIDATION set (see results/xlmr_tuning_runs.csv):
+# 6 epochs on full data (LoRA and (IA)3 both peaked around epoch 3, best epoch is kept),
+# (IA)3 learns more smoothly with lr 1e-3 than with 3e-3
+DEFAULT_LR = {"head": 1e-3, "lora": 5e-4, "ia3": 1e-3, "full": 2e-5}
 lr = args.lr or DEFAULT_LR[args.method]
-epochs = args.epochs or (3 if args.train_size == "full" else 10)  # small data needs more epochs
+epochs = args.epochs or (6 if args.train_size == "full" else 10)  # small data needs more epochs
 
 # where LoRA is added inside each transformer layer (regular expressions on layer names)
 LORA_TARGETS = {

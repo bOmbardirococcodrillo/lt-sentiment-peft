@@ -21,7 +21,7 @@ full_size = runs["train_size"].max()
 
 # ---------- 1. parameter-efficiency table (full training data, mean over seeds)
 full = runs[runs["train_size"] == full_size].fillna({"rank": "", "targets": ""})
-table = full.groupby(["method", "rank", "targets"]).agg(
+table = full.groupby(["method", "rank", "targets", "lr", "epochs"]).agg(
     runs=("seed", "count"), macro_f1=("macro_f1", "mean"), f1_std=("macro_f1", "std"),
     accuracy=("accuracy", "mean"), f1_negative=("f1_negative", "mean"),
     trainable_params=("trainable_params", "first"), trainable_pct=("trainable_pct", "first"),
@@ -43,6 +43,7 @@ if len(tfidf_full):
     lines.append(f"| TF-IDF + LR | - | - | {tfidf_full['macro_f1'].iloc[0]:.3f} | {tfidf_full['f1_negative'].iloc[0]:.3f} | CPU | - | - | - | - |")
 for _, r in table.iterrows():
     name = r["method"] + (f" r={int(r['rank'])} {r['targets']}" if r["method"] == "lora" else "")
+    name += f" (lr {r['lr']:g}, {int(r['epochs'])} ep)"
     f1 = f"{r['macro_f1']:.3f}" + (f" ± {r['f1_std']:.3f}" if r["runs"] > 1 else "")
     gain = f"{r['gain_vs_head']:+.3f}" if "gain_vs_head" in r else "-"
     per_m = f"{r['gain_per_M_params']:.4f}" if "gain_per_M_params" in r and r["method"] != "head" else "-"
