@@ -1,6 +1,7 @@
 # Makes the main results table and the data-size plot from all runs
 #   results/main_table.md      parameter-efficiency table (full training data)
 #   results/data_size_plot.png macro-F1 vs number of training reviews
+#   results/synthetic_table.md + synthetic_plot.png   human vs human + synthetic (if those runs exist)
 #
 # Run after the training runs:  python make_table.py
 # If your best LoRA setting is not rank 8 / qv:  python make_table.py --lora_rank 16 --lora_targets all
@@ -16,6 +17,11 @@ args = parser.parse_args()
 
 runs = pd.read_csv("results/xlmr_runs.csv")
 runs = runs[runs["split"] == "val"]
+if "synthetic" not in runs.columns:
+    runs["synthetic"] = 0
+runs["synthetic"] = runs["synthetic"].fillna(0).astype(int)
+all_runs = runs
+runs = runs[runs["synthetic"] == 0]  # main table and data-size plot use real data only
 tfidf = pd.read_csv("results/baselines.csv")
 full_size = runs["train_size"].max()
 
@@ -79,3 +85,29 @@ plt.legend()
 plt.tight_layout()
 plt.savefig("results/data_size_plot.png", dpi=200)
 print("\nsaved results/main_table.md and results/data_size_plot.png")
+
+# ---------- 3. human vs human + synthetic (LoRA, same human subsets)
+lora_all = all_runs[(all_runs["method"] == "lora") & (all_runs["rank"] == args.lora_rank)
+                    & (all_runs["targets"] == args.lora_targets)]
+syn_sizes = lora_all.loc[lora_all["synthetic"] > 0, "train_size"].unique()
+if len(syn_sizes):
+    lines = ["# Human-only vs human + synthetic (LoRA, validation set)", "",
+             "| Real reviews | Synthetic reviews | Runs | Macro-F1 | F1 (neg) |", "|---|---|---|---|---|"]
+    plt.figure(figsize=(6, 4))
+    for i, n in enumerate(sorted(syn_sizes)):
+        g = (lora_all[lora_all["train_size"] == n].groupby("synthetic")
+             .agg(runs=("seed", "count"), f1=("macro_f1", "mean"), std=("macro_f1", "std"),
+                  f1_neg=("f1_negative", "mean")).reset_index().fillna(0))
+        for _, r in g.iterrows():
+            lines.append(f"| {n:,} | {int(r['synthetic']):,} | {int(r['runs'])} | {r['f1']:.3f} ± {r['std']:.3f} | {r['f1_neg']:.3f} |")
+        labels = [f"{n:,} real\n+ {int(k):,} synth." if k else f"{n:,} real\nonly" for k in g["synthetic"]]
+        plt.errorbar(labels, g["f1"], yerr=g["std"], fmt="o", capsize=5, markersize=8)
+    plt.margins(x=0.2)
+    plt.ylabel("Macro-F1 (validation)")
+    plt.title("Adding synthetic Lithuanian reviews (LoRA)")
+    plt.grid(axis="y", alpha=0.3)
+    plt.tight_layout()
+    plt.savefig("results/synthetic_plot.png", dpi=200)
+    open("results/synthetic_table.md", "w").write("\n".join(lines) + "\n")
+    print("\n" + "\n".join(lines))
+    print("saved results/synthetic_table.md and results/synthetic_plot.png")

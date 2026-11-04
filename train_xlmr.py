@@ -12,6 +12,7 @@
 #   python train_xlmr.py --method lora --rank 8 --targets qv
 #   python train_xlmr.py --method ia3
 #   python train_xlmr.py --method lora --train_size 500 --seed 2
+#   python train_xlmr.py --method lora --train_size 1000 --synthetic 1000   (1000 real + 1000 synthetic)
 
 import argparse
 import json
@@ -36,6 +37,7 @@ parser.add_argument("--lr", type=float, default=None)
 parser.add_argument("--batch_size", type=int, default=32)
 parser.add_argument("--max_len", type=int, default=128)
 parser.add_argument("--model", default="FacebookAI/xlm-roberta-base")
+parser.add_argument("--synthetic", type=int, default=0)                  # how many synthetic reviews to add
 parser.add_argument("--test", action="store_true")                       # only for the final results!
 args = parser.parse_args()
 
@@ -56,7 +58,10 @@ LORA_TARGETS = {
 run_name = args.method
 if args.method == "lora":
     run_name += f"_r{args.rank}_{args.targets}"
-run_name += f"_n{args.train_size}_s{args.seed}"
+run_name += f"_n{args.train_size}"
+if args.synthetic:
+    run_name += f"_syn{args.synthetic}"
+run_name += f"_s{args.seed}"
 print("run:", run_name, "| lr:", lr, "| epochs:", epochs)
 
 # ---------------- reproducibility
@@ -71,9 +76,18 @@ train = pd.read_csv("data/train.csv")
 if args.train_size != "full":
     subsets = json.load(open("data/subsets.json"))
     train = train[train["id"].isin(subsets[str(args.seed)][args.train_size])]
+n_human = len(train)
+if args.synthetic:
+    # add synthetic reviews with the same positive/negative ratio as the real training reviews
+    syn = pd.read_csv("data/synthetic.csv")
+    n_pos = round(args.synthetic * train["label"].mean())
+    syn_pos = syn[syn["label"] == 1].sample(n_pos, random_state=args.seed)
+    syn_neg = syn[syn["label"] == 0].sample(args.synthetic - n_pos, random_state=args.seed)
+    train = pd.concat([train, syn_pos, syn_neg])
+    print(f"added {len(syn_pos)} positive + {len(syn_neg)} negative synthetic reviews")
 val = pd.read_csv("data/val.csv")
 evalset = pd.read_csv("data/test.csv") if args.test else val
-print(f"train: {len(train)} reviews | {'test' if args.test else 'val'}: {len(evalset)} reviews")
+print(f"train: {len(train)} reviews ({n_human} real) | {'test' if args.test else 'val'}: {len(evalset)} reviews")
 
 tokenizer = AutoTokenizer.from_pretrained(args.model)
 
@@ -209,7 +223,7 @@ print(f"training time: {train_time / 60:.1f} min | peak GPU memory: {peak_mem:.2
 row = {
     "run": run_name, "method": args.method,
     "rank": args.rank if args.method == "lora" else "", "targets": args.targets if args.method == "lora" else "",
-    "train_size": len(train), "seed": args.seed, "lr": lr, "epochs": epochs, "best_epoch": best_epoch,
+    "train_size": n_human, "synthetic": args.synthetic, "seed": args.seed, "lr": lr, "epochs": epochs, "best_epoch": best_epoch,
     "trainable_params": trainable_params, "total_params": total_params,
     "trainable_pct": round(100 * trainable_params / total_params, 4),
     "peak_mem_gb": round(peak_mem, 2), "train_time_min": round(train_time / 60, 2),
@@ -219,5 +233,8 @@ row = {
     "gpu": torch.cuda.get_device_name(0) if device == "cuda" else "CPU",
 }
 path = "results/xlmr_runs.csv"
-pd.DataFrame([row]).to_csv(path, mode="a", header=not os.path.exists(path), index=False)
+all_runs = pd.DataFrame([row])
+if os.path.exists(path):  # read + add + write, so new columns (like "synthetic") are handled correctly
+    all_runs = pd.concat([pd.read_csv(path), all_runs], ignore_index=True)
+all_runs.to_csv(path, index=False)
 print("saved to", path)
