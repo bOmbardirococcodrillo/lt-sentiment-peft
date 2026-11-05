@@ -1,0 +1,21 @@
+id,text,sentiment,source,also_tfidf_wrong,reason
+37397,bandyti nusipirkti draudimas kompiuteris diena metyti neveikti swedbank atsiskaitymas tarpu telefonas veikti karto,positive,evertink.lt,True,mild complaint / problem solved
+41008,gavau vienas spintelė du,negative,evertink.lt,False,implicit negative
+46907,trys užsakytas prekė vienas defektas emaliuoti indas apdaužytas,positive,evertink.lt,True,mild complaint
+46744,likaus nepatenkinti kurjeris darbas sutarėm konkretus pristatymas laikas negalėti laukti namas reikėti atsiprašyti darbas atvykti vėluodamas val neįspėti vėluoti,positive,evertink.lt,True,label noise
+42702,kvepalas buteliukas dėžutė nuotrauka parodyti dėžute paštomatas prekę įšėmai atidaryti pakuotė,negative,evertink.lt,True,implicit negative
+47875,užsisakiau val vakaras ryte val gaunu pranešimas prekė paštomate vauuuu,positive,evertink.lt,False,implicit positive / informal
+10216,nusprendžiau pirkti neprisiregistravusi leisti neįvesti kontaktas padaryti užsakymas apmokėti laimė išsisaugoti užsakymas numeris manyti el parduotuvė reikti tobulinti vertus pasirinkti atsiėmimas ofisas labai sunkiai radau nebūti gatvė užrašo įėjimas būti kiemas pusė atiduoti prekę nepatikrinis sumokėti palikti nelabai įspūdis,positive,evertink.lt,True,label noise
+48667,garantiniam priduoti prekė turėjau susisiekti domėtis atsakymas nesusisiekė,positive,evertink.lt,True,label noise
+45789,labai gausus prekė pasirinkimas viskas aiškus suprantama kartas būti nemokamas pristatymas lp espress pristatymas namas ryte gavau sms šiandiena būti pristatyti siuta susieks kurjeris ok laukias namas siunta val sms kurjerias pristatymas laikas tylus būti darbas diena visas diena laukti nebūti galimybė skambinti kurjeris pranešti min būti namas siunta nuvež paštomatas paprašiau palauktu min tekti mesti visas darbas liekti namas būti šoke kurjeris pristatymas visas laikas kurjeris atsiunsti sms pristatymas laikas,positive,evertink.lt,True,mixed review
+42763,pardavėjas reikti pasimokyti bendrauti klientas pakuotė pakankamai sunkios gauti pagalba atsiitm pasikraunant prekė nebūti galimybė,negative,evertink.lt,False,implicit negative
+46748,gauti prekė būti pažeistoje pakuotė t. išėmus maišelis nurodomas gavėjas prekė pakuotė būti atplėsti telefonas laikiklis dėžutė sudėti plastikins laikyklis susukti užkišti prekė atrodyti nepažeisti įsigytj naujas prekė gauti naujas būsena,positive,evertink.lt,True,mild complaint / problem solved
+25934,del klaida atsiunte detale savaite atsiunte tinkamas,positive,evertink.lt,True,problem solved (no diacritics)
+39485,pirkti kuprine liwag ideta pigesne wenig,negative,evertink.lt,False,implicit negative
+19895,reikėti saskaita faktura uab alroba pvm k lt marijampolė silutė,positive,evertink.lt,False,no sentiment information
+17460,labai nuvylė prekė pristatymas pirkau knyga eu norėti atsiimti vieta nekainuoti atsiuntimas norėti atsiimti vieta reikėti pirkti prekė eu tekti pasirinkti prekė būti pristatyti paštomatas užsisakiau prekė pristatyti paštomatas diena niekad negavau laiškas sistema pranešimas prekė būti pristatyti paskambinas d. užsakymas būti pasakyti prekė būti pristatytą paštomatas rytoj bendraujanti darbuotoja tikrai maloniai bendravo nusiskundimas neturėti truputis likau nesuprasti prekę galėti atsiimti diena atvažiuodamas prekė krepšelis būti mažas labai apsimokas prekė pakuoti paimti eu mokestis atsiuntimas laukti prekė diena klientas vieta norėtis pataisymas,positive,evertink.lt,False,mixed review (long)
+46280,tinklalapis būti rašyti užsisakti dėžutė nemokėta užsisakiai dėžutė gavusi užsakymas neradau nemokamai žadėti kapsulis dėžutis nusivyliai,positive,evertink.lt,False,label noise
+45524,vienas užsakymas būti užsakyti du prekė atsiųsti skirtingomis diena tekti du kartas eiti paštas atsiimti užsakymas vonia laiptelis lorelli hippo baltas gauti prekė gerokai supurvinti panašus ilgą laikas būti stumdyti nešvarus grinda laiptelius guminis dalis purvina,positive,evertink.lt,True,label noise
+40510,kvepalas saphir atenea rytietiškas mediena gavau saphir perfect kvepalai,negative,evertink.lt,True,implicit negative
+24659,kas galėti vertinti nežinoti užsakymas priimti,negative,evertink.lt,True,no sentiment information
+12409,labai svarbus pardavinėjate prekė būti vieta reikėti laukti atsiųs šalis daryti el parduotuvė,positive,evertink.lt,True,mild complaint
