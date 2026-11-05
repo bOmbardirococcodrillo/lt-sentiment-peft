@@ -1,0 +1,21 @@
+id,text,sentiment,source,reason
+46784,blogas privaziavimas,positive,evertink.lt,label noise
+22582,kurjeris nepaskambinti pries atvaziuodamas metas niekas nebūti namas žinoma melavo skambinti daug kartu istiesu neskambinas netureti praleistas skambucias,positive,evertink.lt,label noise
+48667,garantiniam priduoti prekė turėjau susisiekti domėtis atsakymas nesusisiekė,positive,evertink.lt,label noise
+46907,trys užsakytas prekė vienas defektas emaliuoti indas apdaužytas,positive,evertink.lt,mild complaint
+34722,prekė pakuotė apgadinta pakuotė plastikinis originalus įpakavimas dovanėlė reikėti vykti parduotuvė grąžinti prekę vertinu labai blogai,negative,evertink.lt,misleading positive words
+14225,diena pavėluoti pristatyti,positive,evertink.lt,mild complaint
+7760,užsakyti sachs spyruoklė gavau fake us žymėjimas dažas nutekejimais spyruoklys,negative,evertink.lt,implicit negative
+47160,neskaitant prekė laukiau mėnesio pakartotinis prekė užsakymas prekę gavau sekančias diena matyt pasimetė,positive,evertink.lt,mild complaint / problem solved
+12409,labai svarbus pardavinėjate prekė būti vieta reikėti laukti atsiųs šalis daryti el parduotuvė,positive,evertink.lt,mild complaint
+40510,kvepalas saphir atenea rytietiškas mediena gavau saphir perfect kvepalai,negative,evertink.lt,implicit negative
+39906,artdecėto soft lip liner n n,negative,evertink.lt,no sentiment information
+46846,is uzsakytu prekiu gavau vienas suma apmokejau uz prekė nesulaukiam atvezant prekė būti pateikti atves diena,positive,evertink.lt,mild complaint / problem solved
+45763,prekė aprašymas užsakiau turėti gauti mažas pakuotė x x m. telpantį veidrodėlis gavau ženkliai didus nebūti pirkusi prašau pasitikslinkite prekė aprašymas neklaidintumėte pirkėjas,positive,evertink.lt,label noise
+46859,daug asmeninis laikas nervų būti sugaišta sugadintas sulaukėme pristatymas,positive,evertink.lt,label noise
+49423,nerekomenduoti support nuotruaka visiškai klaidinančus patodyti nebūti aprašymas supporti visiškai nepadėti niekam nerekomenduočia pigus lt,positive,evertink.lt,label noise
+3352,sveikas nugaišo šiauliai akropolis kikoje pirkti nimfa pirkimas diena paukštis būti snaudžiantis namas elgtis lygiai snaudimas būsena išbūti visas diena lesė nedaug niekada nečiulbėti tikėjomės adaptacinis laikas viskas būti gerai nimfa pirkti čekis turėti būti galimybė tikėtis kompensacija gauti naujas kanarėlę dovanų,negative,atsiliepimai.lt,misleading positive words
+45604,atvykusi parduotuvė atstovėjti eilė turėti susimokėti administravimas mokestis administravo pirkinis nesutinku mokestis prašti grąžinti,positive,evertink.lt,label noise
+31073,rašyti nenorėti,positive,evertink.lt,no sentiment information
+45552,gavau įplėštas pakuotė užklijuoti lipnia juosta labai nemalonus gauti katis maistas,positive,evertink.lt,label noise
+39474,visada nebūti problema si karta likaus kabai nepatenkinti,negative,evertink.lt,contrast
