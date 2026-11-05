@@ -10,13 +10,18 @@ We run everything on Kaggle (Internet on, GPU T4 for the XLM-R part).
 ```
 pip install -r requirements.txt
 python prepare_data.py                              # data/train.csv, val.csv, test.csv
-python baseline_tfidf.py                            # majority + TF-IDF baselines (CPU)
+python baseline_tfidf.py                            # majority + TF-IDF baselines (CPU, validation set)
 python train_xlmr.py --method head                  # frozen XLM-R + head (unadapted baseline)
 python train_xlmr.py --method lora --rank 8 --targets qv
 python train_xlmr.py --method ia3
 python generate_synthetic.py                        # synthetic reviews -> data/synthetic.csv (GPU)
 python train_xlmr.py --method lora --train_size 1000 --synthetic 1000
 python make_table.py                                # main_table.md, data_size_plot.png, synthetic_table.md
+
+# final evaluation on the test set (only once, at the very end):
+python baseline_tfidf.py --test
+python train_xlmr.py --method lora --rank 8 --targets all --seed 1 --test   # same for every final model/seed
+python make_table.py                                # + test_table.md
 ```
 
 Options of `train_xlmr.py`: `--method head|lora|ia3|full`, `--rank`, `--targets qv|attn|all`,

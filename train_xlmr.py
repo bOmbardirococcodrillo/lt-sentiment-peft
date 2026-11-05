@@ -62,6 +62,8 @@ run_name += f"_n{args.train_size}"
 if args.synthetic:
     run_name += f"_syn{args.synthetic}"
 run_name += f"_s{args.seed}"
+if args.test:
+    run_name += "_test"  # test runs get their own name, so validation files are never overwritten
 print("run:", run_name, "| lr:", lr, "| epochs:", epochs)
 
 # ---------------- reproducibility

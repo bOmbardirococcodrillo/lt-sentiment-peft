@@ -2,6 +2,7 @@
 #   results/main_table.md      parameter-efficiency table (full training data)
 #   results/data_size_plot.png macro-F1 vs number of training reviews
 #   results/synthetic_table.md + synthetic_plot.png   human vs human + synthetic (if those runs exist)
+#   results/test_table.md      FINAL results on the test set (if --test runs exist)
 #
 # Run after the training runs:  python make_table.py
 # If your best LoRA setting is not rank 8 / qv:  python make_table.py --lora_rank 16 --lora_targets all
@@ -111,3 +112,33 @@ if len(syn_sizes):
     open("results/synthetic_table.md", "w").write("\n".join(lines) + "\n")
     print("\n" + "\n".join(lines))
     print("saved results/synthetic_table.md and results/synthetic_plot.png")
+
+# ---------- 4. FINAL results on the test set (runs made with --test)
+import os
+raw_runs = pd.read_csv("results/xlmr_runs.csv")
+test = raw_runs[raw_runs["split"] == "test"].fillna({"rank": "", "targets": ""})
+if "synthetic" in test.columns:
+    test = test[test["synthetic"].fillna(0) == 0]
+if len(test):
+    g = test.groupby(["method", "rank", "targets"]).agg(
+        runs=("seed", "count"), macro_f1=("macro_f1", "mean"), f1_std=("macro_f1", "std"),
+        accuracy=("accuracy", "mean"), f1_negative=("f1_negative", "mean"),
+        trainable_params=("trainable_params", "first"),
+    ).reset_index().fillna({"f1_std": 0})
+    lines = ["# FINAL results (test set, full training data)", "",
+             "| Method | Trainable params | Runs | Macro-F1 | Accuracy | F1 (neg) |", "|---|---|---|---|---|---|"]
+    if os.path.exists("results/baselines_test.csv"):
+        b = pd.read_csv("results/baselines_test.csv")
+        for name, label in [("majority", "Majority class"), ("tfidf", "TF-IDF + LR")]:
+            r = b[b["model"] == name].iloc[0]
+            lines.append(f"| {label} | - | 1 | {r['macro_f1']:.3f} | {r['accuracy']:.3f} | {r['f1_negative']:.3f} |")
+    names = {"head": "XLM-R frozen + head (unadapted)", "ia3": "XLM-R (IA)³", "full": "XLM-R full fine-tuning"}
+    for _, r in g.iterrows():
+        name = names.get(r["method"], r["method"])
+        if r["method"] == "lora":
+            name = f"XLM-R LoRA r={int(r['rank'])} {r['targets']}"
+        lines.append(f"| {name} | {int(r['trainable_params']):,} | {int(r['runs'])} | {r['macro_f1']:.3f} ± {r['f1_std']:.3f} "
+                     f"| {r['accuracy']:.3f} | {r['f1_negative']:.3f} |")
+    open("results/test_table.md", "w").write("\n".join(lines) + "\n")
+    print("\n" + "\n".join(lines))
+    print("saved results/test_table.md")
